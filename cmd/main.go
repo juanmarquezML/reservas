@@ -19,12 +19,11 @@ func main() {
 
 	// init routers
 	userRouter := router.NewUserRouter(userService)
-	customerRouter := router.NewCostumerRouter(customerService)
-	// register endpoints
-	//http.HandleFunc("/user", userRouter.HandleUsers)
+	customerRouter := router.NewCustomerRouter(customerService)
+
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/customer", customerRouter.HandleUsers)
+	mux.HandleFunc("/customer", customerRouter.HandlerCustomer)
 	mux.HandleFunc("/user", userRouter.HandleUsers)
 
 	log.Println("Server starting")

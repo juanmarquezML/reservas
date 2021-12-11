@@ -19,6 +19,7 @@ type Validador interface {
 var usersResponses = map[string]MsgStatus{
 	"error_writting":   {"Error", "Error writing response"},
 	"email_obligatory": {"Error", "The email parameter is obligatory"},
+	"cuit_obligatory":  {"Error", "The cuit parameter is obligatory"},
 	"error_marshaling": {"Error", "Error marshaling response"},
 	"error_body":       {"Error", "Error parsing body content"},
 	"error_post":       {"Error", "Error to Created Record"},
@@ -50,11 +51,6 @@ func ShowMessage(w http.ResponseWriter, keyMensaje string) {
 	if err != nil {
 		http.Error(w, "error writing response", http.StatusInternalServerError)
 		return
-
-		/*
-			http.Error(w, "error to created user", http.StatusBadRequest)
-			return
-		*/
 	}
 
 }
