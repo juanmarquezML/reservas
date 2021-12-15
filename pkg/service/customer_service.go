@@ -5,9 +5,9 @@ import (
 	"learngo/api_only_go_task/pkg/storage"
 )
 
-type CustumerService interface {
-	CreateCustumer(custumer *model.Customer) error
-	//GetCustumer(cuit string) (*model.Customer, error)
+type CustomerService interface {
+	CreateCustomer(custumer *model.Customer) error
+	GetCustomer(cuit string) (*model.Customer, error)
 }
 
 type customerService struct {
@@ -18,11 +18,11 @@ func NewCustomerService(u storage.CustomerStorage) *customerService {
 	return &customerService{u}
 }
 
-func (s *customerService) CreateCustumer(cts *model.Customer) error {
+func (s *customerService) CreateCustomer(cts *model.Customer) error {
 	return s.customerStorage.SaveCustomer(cts)
 }
 
-/*func (s *userService)GetUser(email string) (*model.User, error) {
-	user, error:=s.userStorage.GetUser(email)
-	return user, error
-}*/
+func (s *customerService) GetCustomer(cuit string) (*model.Customer, error) {
+	cts, error := s.customerStorage.GetCustomer(cuit)
+	return cts, error
+}

@@ -59,6 +59,17 @@ func (ro *userRouter) HandleUsers(w http.ResponseWriter, req *http.Request) {
 		}
 
 		//reqBodyBytes := new(bytes.Buffer)
+		//validamos si el usuario no esta registrado
+		user, err := ro.service.GetUser(u.Email)
+		if err != nil {
+			utils.ShowMessage(w, "error_validate_data")
+			return
+		}
+		if user.Email != "" {
+			utils.ShowMessage(w, "Error! this email exist")
+			return
+		}
+
 		err = ro.service.CreateUser(u)
 		if err != nil {
 			utils.ShowMessage(w, "error_post")

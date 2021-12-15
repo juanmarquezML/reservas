@@ -6,9 +6,9 @@ type User struct {
 }
 type Customer struct {
 	Name      string `json:"name" validate:"required"`
-	Cuit      string `json:"name" validate:"required"`
-	Direccion string `json:"name" validate:"required"`
-	Telefono  string `json:"name" validate:"phone"`
+	Cuit      string `json:"cuit" validate:"required"`
+	Direccion string `json:"direccion" validate:"required"`
+	Telefono  string `json:"telefono"`
 }
 type Resp struct {
 	Status  string `json:status`
