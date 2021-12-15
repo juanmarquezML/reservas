@@ -9,25 +9,38 @@ import (
 	"net/http"
 )
 
-type CustumerRouter interface {
+type CustomerRouter interface {
 	HandlerCustumer(w http.ResponseWriter, req *http.Request)
 }
 
-type custumerRouter struct {
-	service service.CustumerService
+type customerRouter struct {
+	service service.CustomerService
 }
 
-func NewCostumerRouter(s service.CustumerService) *custumerRouter {
-	return &custumerRouter{s}
+func NewCustomerRouter(s service.CustomerService) *customerRouter {
+	return &customerRouter{s}
 }
 
-func (csr *custumerRouter) HandlerCustumer(w http.ResponseWriter, req *http.Request) {
+func (csr *customerRouter) HandlerCustomer(w http.ResponseWriter, req *http.Request) {
+	w.Header().Add("Content-Type", "application/json")
+	var cst *model.Customer
+	var err error
+	resp := make([]byte, 0)
 	switch req.Method {
 	case "GET":
+		if cuit := req.URL.Query().Get("cuit"); cuit != "" {
+			if ctsData, err := csr.service.GetCustomer(cuit); err == nil {
+				resp, err = json.Marshal(ctsData)
+				_, err = w.Write(resp)
+			} else {
+				utils.ShowMessage(w, fmt.Sprint(err))
+			}
+		} else {
+			utils.ShowMessage(w, "cuit_obligatory")
+			return
+		}
 
 	case "POST":
-		var cst *model.Customer
-		var err error
 		// -> BUSCAMOS PARA INSERTAR EL REGISTRO
 		err = json.NewDecoder(req.Body).Decode(&cst)
 		if err != nil {
@@ -40,7 +53,7 @@ func (csr *custumerRouter) HandlerCustumer(w http.ResponseWriter, req *http.Requ
 			utils.ShowMessage(w, fmt.Sprintf(err.Error()))
 			return
 		}
-		err = csr.service.CreateCustumer(cst)
+		err = csr.service.CreateCustomer(cst)
 		if err != nil {
 			utils.ShowMessage(w, "error_post")
 			return
@@ -52,7 +65,5 @@ func (csr *custumerRouter) HandlerCustumer(w http.ResponseWriter, req *http.Requ
 		http.Error(w, "Method not enabled", http.StatusInternalServerError)
 		return
 	}
-
-	fmt.Println("aca andamos")
 
 }

@@ -10,7 +10,6 @@ import (
 
 func main() {
 	//init storage
-
 	userStorage := storage.NewUserStorage()
 	customerStorage := storage.NewCustomerStorage()
 	// init service
